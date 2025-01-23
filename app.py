@@ -2,7 +2,7 @@ import streamlit as st
 
 # Page Configurations
 st.set_page_config(
-    page_title="Interactive Content Hypothesis",
+    page_title="B2B SaaS Content Marketing Hypothesis",  # Updated Page Title
     page_icon="💡",
     layout="wide",  # Change to wide for better mobile responsiveness
 )
@@ -18,7 +18,7 @@ st.markdown(
         --background-color: #fcf7f2;
         --text-color: black;
     }
-    
+
     /* Responsive Typography */
     @media (max-width: 600px) {
         .header {
@@ -35,7 +35,7 @@ st.markdown(
             padding: 10px 25px !important;
         }
     }
-    
+
     /* Base Styles */
     .main {
         background-color: #fcf7f2; /* Light cream background */
@@ -96,7 +96,7 @@ st.markdown(
         gap: 20px;
         margin-top: 20px;
     }
-    
+
     /* Prevent dark mode overrides */
     body, .stApp {
         background-color: #fcf7f2 !important;
@@ -112,13 +112,10 @@ st.markdown('<div class="header">Our Hypothesis</div>', unsafe_allow_html=True)
 st.markdown(
     """
     <div class="subheader">
-        Static content marketing is no longer effective. Today's audiences demand 
-        content that feels relevant, engaging, and personalized. Generic, one-size-fits-all 
-        messaging fails to resonate, lacks depth, and doesn't provide enough value.<br><br>
-        We believe that the future of content lies in 
-        <strong>interactive, prospect-focused experiences</strong> that adapt to the unique needs 
-        of each audience segment. These experiences drive meaningful engagement, build trust, 
-        and deliver real value—far beyond what static content can achieve.
+        Sample Sample Sample. Sample Sample Sample Sample Sample Sample. Sample Sample Sample Sample Sample Sample Sample Sample Sample.<br><br>
+        Sample Sample Sample Sample Sample Sample 
+        <strong>Sample</strong> Sample Sample Sample Sample Sample Sample Sample Sample 
+        Sample Sample Sample Sample Sample Sample Sample Sample Sample.
     </div>
     """,
     unsafe_allow_html=True
@@ -139,12 +136,8 @@ questions = [
 
 # Insights based on answers
 def get_insight(answers):
-    if answers == ["Yes", "Yes", "Yes", "Yes"]:
-        return "You are highly aligned with interactive content strategies. Embracing these solutions can transform your engagement and conversions."
-    elif answers.count("No") > 2:
-        return "You may not yet see the full potential of personalization. Consider testing smaller strategies to evaluate their impact."
-    else:
-        return "You see the value of personalization but may need more confidence in ROI. Start small and iterate based on results."
+    # Return a 150-word "Sample" string
+    return " ".join(["Sample"] * 150)
 
 # Render question dynamically
 if st.session_state.current_level < len(questions):
@@ -170,7 +163,18 @@ else:
     st.success(insight)
 
     # Optional: Add a reset button
-    if st.button("Start Over"):
-        st.session_state.current_level = 0
-        st.session_state.answers = []
-        st.rerun()
+    # if st.button("Start Over"):
+    #     st.session_state.current_level = 0
+    #     st.session_state.answers = []
+    #     st.rerun()
+
+    # Add Lead Magnet Section
+    st.markdown("#### Be among the first to try our product—sign up now")
+    email = st.text_input("Enter your email:", placeholder="you@example.com")
+    if st.button("Submit Email"):
+        if email:
+            st.success("Thank you! We'll be in touch soon.")
+        else:
+            st.error("Please enter a valid email address.")
+
+
