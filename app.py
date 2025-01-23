@@ -122,59 +122,90 @@ st.markdown(
 )
 
 # Initialize session state to track progress
-if "current_level" not in st.session_state:
-    st.session_state.current_level = 0
+if "current_question" not in st.session_state:
+    st.session_state.current_question = "root"
     st.session_state.answers = []
 
-# Questions and flow logic
-questions = [
-    {"question": "Do you believe in personalized marketing?"},
-    {"question": "Do you think static content is outdated?"},
-    {"question": "Do you want to explore interactive content tools?"},
-    {"question": "Would you invest in interactive content solutions?"},
+# Questions and branches
+root_question = "Are you a growth focused founder or a SaaS product marketer?"
+
+branch_yes = [
+    "Sample Question - 1 (Yes Branch)",
+    "Sample Question - 2 (Yes Branch)",
+    "Sample Question - 3 (Yes Branch)",
 ]
 
-# Insights based on answers
-def get_insight(answers):
-    # Return a 150-word "Sample" string
-    return " ".join(["Sample"] * 150)
+branch_no = [
+    "Sample Question - 1 (No Branch)",
+    "Sample Question - 2 (No Branch)",
+    "Sample Question - 3 (No Branch)",
+]
 
-# Render question dynamically
-if st.session_state.current_level < len(questions):
-    current_question = questions[st.session_state.current_level]
 
+# Insight function
+def get_insight():
+    return " ".join(["Sample"] * 100)
+
+
+# Render questions dynamically
+if st.session_state.current_question == "root":
     st.markdown('<div class="question-box">', unsafe_allow_html=True)
-    st.markdown(f'<div class="question-text">{current_question["question"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="question-text">{root_question}</div>', unsafe_allow_html=True)
 
-    # Buttons
-    if st.button("Yes", key=f"yes_{st.session_state.current_level}"):
-        st.session_state.answers.append("Yes")
-        st.session_state.current_level += 1
+    if st.button("Yes"):
+        st.session_state.current_question = "yes_branch_0"
         st.rerun()
 
-    if st.button("No", key=f"no_{st.session_state.current_level}"):
-        st.session_state.answers.append("No")
-        st.session_state.current_level += 1
+    if st.button("No"):
+        st.session_state.current_question = "no_branch_0"
         st.rerun()
-else:
-    # Show the final insight
-    insight = get_insight(st.session_state.answers)
-    st.markdown("### Final Insight")
-    st.success(insight)
 
-    # Optional: Add a reset button
-    # if st.button("Start Over"):
-    #     st.session_state.current_level = 0
-    #     st.session_state.answers = []
-    #     st.rerun()
+# Yes Branch
+elif "yes_branch" in st.session_state.current_question:
+    index = int(st.session_state.current_question.split("_")[-1])
+    if index < len(branch_yes):
+        st.markdown('<div class="question-box">', unsafe_allow_html=True)
+        st.markdown(f'<div class="question-text">{branch_yes[index]}</div>', unsafe_allow_html=True)
 
-    # Add Lead Magnet Section
-    st.markdown("#### Be among the first to try our product—sign up now")
-    email = st.text_input("Enter your email:", placeholder="you@example.com")
-    if st.button("Submit Email"):
-        if email:
-            st.success("Thank you! We'll be in touch soon.")
-        else:
-            st.error("Please enter a valid email address.")
+        if st.button("Yes"):
+            st.session_state.current_question = f"yes_branch_{index + 1}"
+            st.rerun()
 
+        if st.button("No"):
+            st.session_state.current_question = f"yes_branch_{index + 1}"
+            st.rerun()
+    else:
+        st.markdown("### Final Insight")
+        st.success(get_insight())
+        # Lead magnet
+        email = st.text_input("Enter your email to stay updated:", placeholder="you@example.com")
+        if st.button("Submit Email"):
+            if email:
+                st.success("Thank you! You'll be the first to know.")
+            else:
+                st.error("Please enter a valid email.")
 
+# No Branch
+elif "no_branch" in st.session_state.current_question:
+    index = int(st.session_state.current_question.split("_")[-1])
+    if index < len(branch_no):
+        st.markdown('<div class="question-box">', unsafe_allow_html=True)
+        st.markdown(f'<div class="question-text">{branch_no[index]}</div>', unsafe_allow_html=True)
+
+        if st.button("Yes"):
+            st.session_state.current_question = f"no_branch_{index + 1}"
+            st.rerun()
+
+        if st.button("No"):
+            st.session_state.current_question = f"no_branch_{index + 1}"
+            st.rerun()
+    else:
+        st.markdown("### Final Insight")
+        st.success(get_insight())
+        # Lead magnet
+        email = st.text_input("Enter your email to stay updated:", placeholder="you@example.com")
+        if st.button("Submit Email"):
+            if email:
+                st.success("Thank you! You'll be the first to know.")
+            else:
+                st.error("Please enter a valid email.")
