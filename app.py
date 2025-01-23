@@ -4,16 +4,45 @@ import streamlit as st
 st.set_page_config(
     page_title="Interactive Content Hypothesis",
     page_icon="💡",
-    layout="centered"
+    layout="wide",  # Change to wide for better mobile responsiveness
 )
 
-# CSS for Styling
+# CSS for Mobile-Friendly and Light Mode Styling
 st.markdown(
     """
     <style>
+    /* Force Light Mode */
+    :root {
+        color-scheme: light;
+        --primary-color: #004d33;
+        --background-color: #fcf7f2;
+        --text-color: black;
+    }
+    
+    /* Responsive Typography */
+    @media (max-width: 600px) {
+        .header {
+            font-size: 28px !important;
+        }
+        .subheader {
+            font-size: 16px !important;
+        }
+        .question-text {
+            font-size: 20px !important;
+        }
+        .stButton>button {
+            font-size: 16px !important;
+            padding: 10px 25px !important;
+        }
+    }
+    
+    /* Base Styles */
     .main {
         background-color: #fcf7f2; /* Light cream background */
         font-family: 'Helvetica Neue', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
     }
     .header {
         color: #004d33; /* Dark Green */
@@ -36,32 +65,42 @@ st.markdown(
         text-align: center;
     }
     .question-text {
-        font-size: 24px; /* Increased font size for better balance */
+        font-size: 24px;
         font-weight: bold;
         margin-bottom: 20px;
     }
     .stButton>button {
         background-color: white;
         color: #004d33;
-        font-size: 20px; /* Slightly larger font size */
+        font-size: 20px;
         font-weight: bold;
         border: 2px solid #004d33;
-        border-radius: 30px; /* Slightly larger buttons */
-        padding: 15px 35px; /* Increased padding for better proportions */
+        border-radius: 30px;
+        padding: 15px 35px;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Full width for better mobile touch target */
+        max-width: 300px; /* Limit max width */
+        margin: 10px auto; /* Center buttons */
     }
     .stButton>button:hover {
-        background-color: #67a06f; /* Green-ish hover color */
+        background-color: #67a06f;
         color: white;
-        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* More prominent shadow on hover */
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
     }
     .button-container {
         display: flex;
-        justify-content: center;
-        gap: 40px; /* Increased gap for better balance */
+        flex-direction: column; /* Stack buttons vertically on mobile */
+        align-items: center;
+        gap: 20px;
         margin-top: 20px;
+    }
+    
+    /* Prevent dark mode overrides */
+    body, .stApp {
+        background-color: #fcf7f2 !important;
+        color: black !important;
     }
     </style>
     """,
@@ -115,18 +154,15 @@ if st.session_state.current_level < len(questions):
     st.markdown(f'<div class="question-text">{current_question["question"]}</div>', unsafe_allow_html=True)
 
     # Buttons
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Yes", key=f"yes_{st.session_state.current_level}"):
-            st.session_state.answers.append("Yes")
-            st.session_state.current_level += 1
-            st.rerun()
+    if st.button("Yes", key=f"yes_{st.session_state.current_level}"):
+        st.session_state.answers.append("Yes")
+        st.session_state.current_level += 1
+        st.rerun()
 
-    with col2:
-        if st.button("No", key=f"no_{st.session_state.current_level}"):
-            st.session_state.answers.append("No")
-            st.session_state.current_level += 1
-            st.rerun()
+    if st.button("No", key=f"no_{st.session_state.current_level}"):
+        st.session_state.answers.append("No")
+        st.session_state.current_level += 1
+        st.rerun()
 else:
     # Show the final insight
     insight = get_insight(st.session_state.answers)
